@@ -77,8 +77,9 @@ sub new {
 	};
 	bless($self, $class_name);
 
-	$self->_set_proxy(8888);
-
+	if ($ENV{'TEKI_PROXY_PORT'} =~ /^(\d{3,})$/) {
+		$self->_set_proxy($1);
+	}
 	return $self;
 }
 
@@ -93,11 +94,11 @@ sub _set_proxy {
 		$auth_string = "$username:$password\@";
 	}
 	my $proxy_string = "http://$auth_string$hostname:$port";
+
 	$ENV{'HTTP_PROXY'} = $proxy_string;
 	$ENV{'http_proxy'} = $proxy_string;
 	$ENV{'HTTPS_PROXY'} = $proxy_string;
 	$ENV{'https_proxy'} = $proxy_string;
-
 }
 
 1;
